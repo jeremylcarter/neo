@@ -50,9 +50,12 @@ namespace Neo
             throw new Exception();
         }
 
+        /// <summary>
+        /// Converts source string represented as hexadecimal characters (with no character delimiter) into source byte array.
+        /// </summary>
         public static byte[] HexToBytes(this string value)
         {
-            if (value == null || value.Length == 0)
+            if (string.IsNullOrEmpty(value))
                 return new byte[0];
             if (value.Length % 2 == 1)
                 throw new FormatException();
@@ -62,28 +65,34 @@ namespace Neo
             return result;
         }
 
-        internal static BigInteger Mod(this BigInteger x, BigInteger y)
+        /// <summary>
+        /// Divides the value of the source BigInteger by the division parameter, and returns the remainder.
+        /// </summary>
+        internal static BigInteger Mod(this BigInteger source, BigInteger division)
         {
-            x %= y;
-            if (x.Sign < 0)
-                x += y;
-            return x;
+            source %= division;
+            if (source.Sign < 0)
+                source += division;
+            return source;
         }
 
-        internal static BigInteger ModInverse(this BigInteger a, BigInteger n)
+        /// <summary>
+        /// Returns modular multiplicative inverse of the source BigInteger by the modulus parameter.
+        /// </summary>
+        internal static BigInteger ModInverse(this BigInteger source, BigInteger modulus)
         {
-            BigInteger i = n, v = 0, d = 1;
-            while (a > 0)
+            BigInteger i = modulus, v = 0, d = 1;
+            while (source > 0)
             {
-                BigInteger t = i / a, x = a;
-                a = i % x;
+                BigInteger t = i / source, x = source;
+                source = i % x;
                 i = x;
                 x = d;
                 d = v - t * x;
                 v = x;
             }
-            v %= n;
-            if (v < 0) v = (v + n) % n;
+            v %= modulus;
+            if (v < 0) v = (v + modulus) % modulus;
             return v;
         }
 
